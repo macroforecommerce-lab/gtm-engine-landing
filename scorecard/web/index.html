@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scorecard Hero Mock</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Brand kit (authoritative): Montserrat display, DM Sans body.
+     White is the page base; navy carries emphasis. */
+  :root{
+    --white:#FFFFFF; --off:#F4F4F4; --navy:#010D3F; --charcoal:#2A2A2A;
+    --blue:#0464F6; --cyan:#04B1DB;
+    --grad:linear-gradient(92deg,var(--blue),var(--cyan));
+    --line:#E3E6EE; --muted:#5B6280;
+    --display:'Montserrat','Helvetica Neue',Arial,sans-serif;
+    --body:'DM Sans','Helvetica Neue',Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--white);color:var(--charcoal);font:400 17px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  /* Placeholder marker: anything the user must write is visibly bracketed. */
+  .ph{color:var(--muted);font-style:italic}
+  .ph-tag{display:inline-block;font:600 11px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);border:1px dashed #B9BFD3;border-radius:999px;padding:6px 10px;margin-bottom:22px}
+
+  header.bar{padding:22px 0}
+  .logo{font:800 20px/1 var(--display);letter-spacing:.04em;color:var(--navy)}
+
+  .hero{padding-block:48px 88px;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  h1{font:800 clamp(36px,5vw,58px)/1.06 var(--display);color:var(--navy);letter-spacing:-.02em}
+  h1 .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{margin-top:22px;max-width:34em;color:var(--charcoal)}
+
+  .field{margin-top:32px;display:flex;gap:10px;max-width:560px;padding:8px;background:var(--white);
+    border:1.5px solid var(--navy);border-radius:16px;box-shadow:0 10px 30px -12px rgba(1,13,63,.25)}
+  .field:focus-within{box-shadow:0 0 0 4px rgba(4,100,246,.18),0 10px 30px -12px rgba(1,13,63,.25)}
+  .field input{flex:1;min-width:0;border:0;outline:0;background:transparent;padding:14px 14px;font:500 17px var(--body);color:var(--navy)}
+  .field input::placeholder{color:#8A91AB}
+  .btn{border:0;cursor:pointer;border-radius:11px;padding:0 24px;font:700 16px var(--display);color:#fff;
+    background:var(--grad);white-space:nowrap;min-height:52px;transition:transform .15s,filter .15s}
+  .btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .btn:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+  .fine{margin-top:14px;font-size:14px;color:var(--muted)}
+
+  /* Example scorecard: labelled as an example, never as a real client's result. */
+  .card{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:26px;
+    box-shadow:0 30px 60px -30px rgba(1,13,63,.28)}
+  .card-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .eg{font:600 11px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--blue);
+    background:rgba(4,100,246,.08);border-radius:999px;padding:7px 10px}
+  .site{font:600 15px var(--display);color:var(--navy)}
+  .total{font:800 38px/1 var(--display);color:var(--navy)}
+  .total small{font:600 16px var(--display);color:var(--muted)}
+  .rows{list-style:none;padding:6px 0 0}
+  .rows li{padding:14px 0;border-bottom:1px solid var(--line)}
+  .rows li:last-child{border-bottom:0}
+  .rowhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .dim{font:700 15px var(--display);color:var(--navy)}
+  .num{font:700 14px var(--display);color:var(--navy)}
+  .track{height:8px;border-radius:99px;background:var(--off);margin-top:9px;overflow:hidden}
+  .fill{height:100%;border-radius:99px;background:var(--grad);transform-origin:left;
+    animation:grow .9s cubic-bezier(.2,.7,.2,1) backwards}
+  @keyframes grow{from{transform:scaleX(0)}}
+  .fix{margin-top:8px;font-size:13.5px;color:var(--muted)}
+  .fix b{font-weight:600;color:var(--charcoal)}
+
+  /* One navy band: emphasis against the white page. */
+  .band{background:var(--navy);color:#fff;padding:72px 0}
+  .band h2{font:800 clamp(28px,3.6vw,40px)/1.12 var(--display);letter-spacing:-.01em;max-width:18em}
+  .band .ph{color:#9AA5D1}
+  .band .row{margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .band .btn{min-height:54px;padding:0 28px}
+  .ghost{font:600 15px var(--body);color:#C8D0EE}
+
+  @media (max-width:880px){
+    .hero{grid-template-columns:1fr;gap:40px;padding-block:24px 64px}
+    .field{flex-direction:column}
+    .btn{min-height:54px}
+  }
+  @media (prefers-reduced-motion:reduce){ .fill{animation:none} .btn{transition:none} }
+</style>
+</head>
+<body>
+
+<header class="bar"><div class="wrap"><span class="logo">SCALIENT</span></div></header>
+
+<main>
+<section class="wrap hero">
+  <div>
+    <span class="ph-tag">Mock &middot; headline and subhead are yours to write</span>
+    <h1><span class="ph">[Headline &mdash; hero angle not yet chosen]</span> <span class="accent">[accent words]</span></h1>
+    <p class="sub"><span class="ph">[Subhead &mdash; your copy.]</span>
+      Enter your website. In about 60 seconds you get five scores with the evidence behind each.</p>
+
+    <form class="field" onsubmit="return false" aria-label="Score your website">
+      <input type="text" inputmode="url" autocomplete="url" placeholder="yourcompany.com" aria-label="Your website">
+      <button class="btn" type="submit"><span class="ph" style="color:#fff;font-style:normal">[Button label]</span></button>
+    </form>
+    <p class="fine"><span class="ph">[Reassurance line &mdash; your copy.]</span></p>
+  </div>
+
+  <aside class="card" aria-label="Example scorecard">
+    <div class="card-top">
+      <div>
+        <span class="eg">Example</span>
+        <div class="site" style="margin-top:10px">yourcompany.com</div>
+      </div>
+      <div class="total">16<small>/25</small></div>
+    </div>
+    <ul class="rows">
+      <li><div class="rowhead"><span class="dim">ICP clarity</span><span class="num">3/5</span></div>
+        <div class="track"><div class="fill" style="width:60%;animation-delay:.05s"></div></div>
+        <p class="fix"><b>Fixed by</b> ICP definition &amp; messaging</p></li>
+      <li><div class="rowhead"><span class="dim">Positioning</span><span class="num">4/5</span></div>
+        <div class="track"><div class="fill" style="width:80%;animation-delay:.12s"></div></div>
+        <p class="fix"><b>Fixed by</b> ICP definition &amp; messaging</p></li>
+      <li><div class="rowhead"><span class="dim">Proof for outbound</span><span class="num">4/5</span></div>
+        <div class="track"><div class="fill" style="width:80%;animation-delay:.19s"></div></div>
+        <p class="fix"><b>Fixed by</b> Clay &amp; AI-powered funnels</p></li>
+      <li><div class="rowhead"><span class="dim">Conversion path</span><span class="num">2/5</span></div>
+        <div class="track"><div class="fill" style="width:40%;animation-delay:.26s"></div></div>
+        <p class="fix"><b>Fixed by</b> Full-funnel distribution</p></li>
+      <li><div class="rowhead"><span class="dim">Founder signal</span><span class="num">3/5</span></div>
+        <div class="track"><div class="fill" style="width:60%;animation-delay:.33s"></div></div>
+        <p class="fix"><b>Fixed by</b> LinkedIn personal branding</p></li>
+    </ul>
+  </aside>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2><span class="ph">[Final CTA headline &mdash; your copy]</span></h2>
+    <div class="row">
+      <button class="btn" type="button"><span class="ph" style="color:#fff;font-style:normal">[Button label]</span></button>
+      <span class="ghost ph">[Supporting line]</span>
+    </div>
+  </div>
+</section>
+</main>
+
+</body>
+</html>
