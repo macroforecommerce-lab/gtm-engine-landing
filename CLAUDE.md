@@ -22,6 +22,17 @@ and their deployments are not to be replaced:
 
 New landing-page work goes in its own directory and its own Vercel project.
 
+**Never run the audit analyser against a client's site, and never record a
+client's score.** `scorecard/audit_proto.py` exists to tell a stranger their
+page is weak. Aimed at someone we already work with it is an insult with our
+name on it, and a score committed to a repo or written into a pull request is
+permanent and public. The client roster in `memory.md` is the list to check
+against — ShipVista and Lexroom.ai are both on it, and both were used as test
+targets before this rule existed. Verify against `scalient-ai.com`, which is
+ours, and the synthetic fixtures in `scorecard/test_audit.py`, which belong to
+nobody. A neutral benchmark set needs sign-off on which sites qualify before
+any third-party domain goes into the test record.
+
 **Never run `deploy.py` from the PM team's handover zip.** It authenticates with
 a Cloudflare *global* API key read from a credentials file on disk. A global key
 can do anything on the account. If that page needs redeploying, it is the PM

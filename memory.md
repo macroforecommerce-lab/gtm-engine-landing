@@ -113,48 +113,40 @@ for him.
 `audit_proto.py` scores a URL across the five dimensions from observable page
 signals. No randomness, no inference from the domain name, and a page offering
 nothing to measure scores low rather than receiving a flattering default.
+`test_audit.py` holds 25 fixture assertions and needs no network.
 
-Measured on live sites: **scalient-ai.com 17/25, shipvista.com 16/25,
-lexroom.ai 9/25.** That 8-point spread is the proof it discriminates; a tool
-that hands everyone 15/25 is theatre.
+**Never run it against a client's site and never record a client's score** — the
+standing rule is in `CLAUDE.md`. Verification uses `scalient-ai.com`, which is
+ours, plus synthetic fixtures.
 
-Three defects found during that test, all still open:
+Verified 2026-10-03: `scalient-ai.com` **16/25** (ICP 3, positioning 4, proof 4,
+conversion 2, founder 3). Fixtures span 0/5 to 5/5 on positioning and trip both
+refusal gates.
 
-1. **Positioning scores too generously** — gave 5/5 to ShipVista's truncated h1.
-   Needs a quality check, not just a length check.
-2. **Buzzword matching misses inflections** — "Leveraging" slips past a filter
-   that catches "leverage".
-3. **Non-English pages score unfairly** — lexroom.ai is Italian, so ICP scored
-   0/5 on vocabulary grounds rather than GTM grounds. Tolerable for Indian
-   founders, wrong for a European prospect.
+Four defects found and **fixed** 2026-10-03:
 
-The prototype lives only in the session scratchpad, which does not survive a
-reset. It must be rewritten into the new project's repo before it counts as kept.
+1. **Positioning scored on length alone** — any h1 under 16 words took 3 of 5
+   whether or not it claimed anything. Now it must be well formed *and* name a
+   number or a buyer; a buzzword in the h1 costs a point; and the credit for a
+   buzzword-free opening is capped at the strength of the claim, so a page with
+   no h1 can no longer bank it. Generic-but-tidy h1 5/5 → 2/5, no h1 2/5 → 0/5.
+2. **Buzzwords missed inflections** — now matched by stem, so "Leveraging" is
+   caught by the same rule as "leverage". Verified not to fire on "level",
+   "sales" or "deliver".
+3. **Non-English pages were scored on English vocabularies** — now detected via
+   `<html lang>` plus stopword rates across five languages, and refused with the
+   reason rather than scored.
+4. **A page too thin to read scored as a page that was weak** — found while
+   fixing the above, and the most damaging of the four for a lead magnet. Under
+   120 visible words the page is refused: a client-side-rendered shell or a
+   redirect body had been scoring near 0/25, telling a prospect their GTM was
+   broken when the page had simply not been read.
 
-### Environment constraints, all confirmed by testing
+Both refusals still return what can be seen without vocabulary — numbers,
+LinkedIn links, booking link, form-field count, h1 length.
 
-- **GitHub now works.** It did not for most of this session — the API answered
-  *"GitHub access is not enabled for this session"* and every write returned 403.
-  A credentialed `gh` proxy then appeared mid-session; `gh api` reports
-  `push: true, admin: true` and `git push` succeeds. The general lesson, recorded
-  in `project-log.md`: an environment limit confirmed by testing holds for the
-  moment it was tested, not for the session. Re-test before calling something
-  permanently impossible.
-- **Vercel: a production deployment can only be created along with the project.**
-  Deploying again to an existing project returns 403 *"You don't have permission
-  to create a Production Deployment for this project."* Each production deploy
-  therefore needs a brand-new project, which is how both live pages were shipped.
-- **Vercel reads are scoped to 12 pre-authorised projects.** Projects created by
-  this session are invisible to it — `get_project` and `list_deployments` 404,
-  so build logs and env vars are unreachable.
-- **Use the clean production domain, never the deployment URL.** `<project>.vercel.app`
-  returns 200; `<project>-<team>.vercel.app` redirects to Vercel SSO. This single
-  distinction was the difference between "the deploy failed" and "the site is live".
-- **Chromium cannot reach external sites** through the agent proxy
-  (`ERR_CONNECTION_RESET`), with or without the proxy passed to Playwright.
-  `curl` with a browser user-agent works. Mirror the site locally and screenshot
-  `127.0.0.1`.
-- **A clock discrepancy exists and is unexplained.** Deployment and lead
-  timestamps observed in-session read 2026-08-29, and file mtimes read Aug 21,
-  while the session date is 2026-10-03. Worth resolving before anything depends
-  on a timestamp.
+Three limits remain open, listed in the module docstring. The one that matters:
+real-world spread is now evidenced by a single site we own, so a **neutral
+benchmark set** — sites that are neither clients nor prospects — is wanted, and
+needs sign-off on which sites qualify.
+
