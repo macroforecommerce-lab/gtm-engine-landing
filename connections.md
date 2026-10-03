@@ -18,6 +18,12 @@ Pre-existing projects on the team, visible to this connector: `scalient`,
 `funtastique`, `localnotepad`, `eternal-homz-preview`, `outright-solutions`,
 `images`, `express-js-on-vercel`, `flow-export-1776253495281`.
 
+**2026-10-03, later: project creation is now refused.** `create_project` and a
+deployment that would create one both return 403 ("You don't have permission to
+create a project"). Reads (`list_teams`, `list_projects`) still work. A fresh
+project worked earlier the same day, so this is a change, not a standing limit.
+Do not deploy into one of the pre-existing projects as a workaround.
+
 Two limits worth knowing before planning any deploy work — both verified, see
 `memory.md`: production deploys only happen when a project is created, and
 projects this session creates are invisible to it afterwards.

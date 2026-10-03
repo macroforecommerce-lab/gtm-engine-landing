@@ -28,20 +28,22 @@ after an earlier round where a finished page was delivered and rejected.
   writes it.
 - Step 4 — UI and build: not started. White-page direction already decided (below).
 
-**UI direction decided (2026-10-03): white page, navy for emphasis.** Pure `#FFFFFF`
-base, navy `#010D3F` text, blue-to-cyan gradient on accents and buttons,
-`#F4F4F4` for tracks and quiet surfaces, one navy band (the final CTA) for
-rhythm. Prompted by the user seeing the old teardown page and asking for a white
-background; they confirmed it applies to the *new* page, not the frozen ones.
-A hero-only mock lives in `scorecard/web/index.html` — static, no build step.
-Every line of copy in it is a bracketed placeholder except the locked offer
-sentence and the five dimension names; the example scorecard is labelled
-"Example" and uses a placeholder domain. Not deployed.
+**Built 2026-10-03 (draft, awaiting the user's review):** the full Scorecard page
+in `scorecard/web/` — 8 sections, white page with one navy band, working audit and
+lead flow, all copy drafted. The user switched from "you supply angles" to
+"complete the build, I'll review and send changes", so the copy is mine as a
+first draft and is to be revised on their feedback. Tests: `test_audit.py`,
+`test_logic.py` and a 58-assertion browser run, all passing locally.
+
+**Not live.** Vercel refuses to create a project from this connection (403 on both
+`create_project` and a deployment that would create one), so the page has only been
+run locally. Deploy steps are in `scorecard/README.md`.
 
 **Blocked on the user, nothing actionable this side:**
 
 | Waiting on | Why it blocks |
 |---|---|
+| Permission to create a Vercel project (or the user imports the repo, Root Directory `scorecard/web`) | The Scorecard page is not live; nobody can click through it |
 | Vercel project access for `scalient-gtm-landing` | No redeploys, no env vars, no build logs |
 | Meta Pixel ID, booking URL, lead webhook URL | Conversion layer is built but inert |
 | Attach `gtm.scalient-ai.com` | Canonical and OG URLs point at a domain that does not resolve |

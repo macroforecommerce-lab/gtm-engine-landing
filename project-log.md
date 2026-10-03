@@ -199,3 +199,31 @@ founder-bottleneck tension (B) is the real positioning but gives a cold visitor
 nothing to do on its own. Also noted: scalient-ai.com's own h1 scores 4/5 on
 positioning because it names no number and no buyer, so the new headline should
 name one or the other.
+
+### 2026-10-03 — The full build, and why it is not live
+
+The user stopped wanting to write the copy ("complete the build, I'll review it and
+come back with changes"), which replaces the earlier division of labour. Built the
+whole page: hero (A+B), result state, problem, system, proof (five testimonials
+copied verbatim from scalient-ai.com, attributions checked against the live page),
+two ways to work, FAQ, final CTA, privacy page, and three Python functions.
+
+Things found and fixed by testing, not by reading:
+- The rate limiter charged one visitor's whole journey (audit, email, route) to a
+  single allowance of 10 per 10 minutes, about three visitors per shared IP. Split
+  into buckets; route answers unlimited.
+- A site that returns 403 to our reader (many will, Cloudflare and similar) showed
+  an error with a dead end. Now reported as unreadable with a way to book a call.
+- Visitor-facing strings said "role(s)", "CTA type(s)" and "stopword rate 0.156".
+  Reworded; a test now fails if "(s)", spaced hyphens or analyser jargon reach a
+  visitor.
+- My own copy promised "we use your email to send the fixes". Nothing sends email;
+  the fixes appear on the page. Removed from the page and its structured data.
+- The test run that hung was my own `pkill -f` matching my own shell. Use a PID file.
+
+Not done: deployment. Vercel returned 403 on project creation. Stopped rather than
+overwrite an existing project.
+
+Open items I could not verify: that the call is with Shivam (not stated on the
+page, deliberately); the Done-for-you price in rupees; the dark logo variant (the
+live logo's wordmark is white, invisible on a white page).
