@@ -95,3 +95,20 @@ are waiting on the user. Six items are blocked on the user, listed in
 **Known unknown:** timestamps observed during the session (deployments, a test
 lead) read 2026-08-29 and file mtimes read Aug 21, while the session date is
 2026-10-03. Unexplained. Nothing has been made to depend on it.
+
+### Correction — 2026-10-03, later the same day
+
+The entry above records GitHub as read-only for this session, quoting the API's
+own *"GitHub access is not enabled for this session."* That was accurate when
+written and every write path did return 403.
+
+It is no longer true. The environment later exposed a credentialed `gh` proxy,
+explicitly superseding the earlier instruction that this session had no GitHub
+API access. `gh api repos/...` now reports `push: true, admin: true`, and
+`git push` succeeded: commit `c166665` is on
+`origin/claude/gifted-shannon-0yefy9`.
+
+Worth keeping because of what it implies: **a blocker here can be lifted by the
+environment mid-session without announcement.** A limit confirmed by testing is
+confirmed for the moment it was tested, not for the session. Re-test before
+reporting something as permanently impossible.

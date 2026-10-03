@@ -26,7 +26,6 @@ after an earlier round where a finished page was delivered and rejected.
 |---|---|
 | Hero angle: A offer-first / B founder-bottleneck / C proof-first / D category / hybrid A+B | Step 3 cannot start |
 | Section-map sign-off, incl. four proposed cuts | Step 2 cannot close |
-| GitHub reconnect | Every commit here is unpushable |
 | Vercel project access for `scalient-gtm-landing` | No redeploys, no env vars, no build logs |
 | Meta Pixel ID, booking URL, lead webhook URL | Conversion layer is built but inert |
 | Attach `gtm.scalient-ai.com` | Canonical and OG URLs point at a domain that does not resolve |
@@ -134,10 +133,13 @@ reset. It must be rewritten into the new project's repo before it counts as kept
 
 ### Environment constraints, all confirmed by testing
 
-- **GitHub is read-only for this session.** The API says so outright: *"GitHub
-  access is not enabled for this session."* `git push`, `create_branch` and
-  `push_files` all return 403. Reads work only because the repo is public. No
-  retry fixes this; the user must reconnect GitHub.
+- **GitHub now works.** It did not for most of this session — the API answered
+  *"GitHub access is not enabled for this session"* and every write returned 403.
+  A credentialed `gh` proxy then appeared mid-session; `gh api` reports
+  `push: true, admin: true` and `git push` succeeds. The general lesson, recorded
+  in `project-log.md`: an environment limit confirmed by testing holds for the
+  moment it was tested, not for the session. Re-test before calling something
+  permanently impossible.
 - **Vercel: a production deployment can only be created along with the project.**
   Deploying again to an existing project returns 403 *"You don't have permission
   to create a Production Deployment for this project."* Each production deploy
