@@ -84,13 +84,13 @@ score is an argument the prospect reached themselves.
 | Conversion path | Full-funnel distribution |
 | Founder signal | LinkedIn personal branding |
 
-### Proposed section map — Step 2, awaiting sign-off
+### Section map — Step 2, approved 2026-10-03
 
 Hero + URL input · Scorecard result (a page state, not a scroll section) · The
 problem · The system (five parts, mapped to the five scores) · Proof · Two ways
 to work · FAQ (4–5, not 7) · Final CTA.
 
-Proposed cuts, with reasons: **nav** (escape hatches on a paid LP), **logo
+Cuts, with reasons (all accepted): **nav** (escape hatches on a paid LP), **logo
 marquee** (borrowed credibility, does not convert cold traffic), **"Under the
 hood" Clay explainer** (call material, too deep for a first touch),
 **comparison table** (most cuttable of the remaining).
