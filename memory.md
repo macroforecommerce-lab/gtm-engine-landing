@@ -20,9 +20,13 @@ side supplies ideas, angles and tradeoffs.** That division was set explicitly
 after an earlier round where a finished page was delivered and rejected.
 
 - Step 1 — Offer: **locked**, see Core memory.
-- Step 2 — Section map: **proposed, awaiting sign-off.** 8 sections, not 14.
-- Step 3 — Copy, section by section: hero angles put to the user, **awaiting a pick.**
-- Step 4 — UI and build: not started.
+- Step 2 — Section map: **approved 2026-10-03.** 8 sections; all four cuts accepted
+  (nav, logo marquee, "Under the hood" Clay explainer, comparison table).
+- Step 3 — Copy, section by section: **in progress.** Hero angle chosen: **A+B
+  hybrid** — an offer-first headline that gives the action, with the
+  founder-bottleneck tension carried in the subhead. Hero copy is next; the user
+  writes it.
+- Step 4 — UI and build: not started. White-page direction already decided (below).
 
 **UI direction decided (2026-10-03): white page, navy for emphasis.** Pure `#FFFFFF`
 base, navy `#010D3F` text, blue-to-cyan gradient on accents and buttons,
@@ -38,8 +42,6 @@ sentence and the five dimension names; the example scorecard is labelled
 
 | Waiting on | Why it blocks |
 |---|---|
-| Hero angle: A offer-first / B founder-bottleneck / C proof-first / D category / hybrid A+B | Step 3 cannot start |
-| Section-map sign-off, incl. four proposed cuts | Step 2 cannot close |
 | Vercel project access for `scalient-gtm-landing` | No redeploys, no env vars, no build logs |
 | Meta Pixel ID, booking URL, lead webhook URL | Conversion layer is built but inert |
 | Attach `gtm.scalient-ai.com` | Canonical and OG URLs point at a domain that does not resolve |

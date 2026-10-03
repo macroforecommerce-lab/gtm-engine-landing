@@ -187,3 +187,15 @@ Side effect worth knowing: the merge triggered the repo's existing Pages deploy,
 which published the untouched Vite skeleton. Run succeeded. Not the Scorecard mock.
 
 PR watch and the 21:15 UTC safety-net check-in were cancelled.
+
+### 2026-10-03 — Hero angle and section map decided
+
+The user asked what was still outstanding ("what about it... let's finish"), so
+both decisions were laid out again with tradeoffs and a recommendation. They took
+the recommendation on both: **hero A+B hybrid**, and the **8-section map with all
+four cuts**. Step 2 is closed; Step 3 (copy, user-written) starts at the hero.
+The supporting reasoning: cold Meta traffic needs the action first (A), and the
+founder-bottleneck tension (B) is the real positioning but gives a cold visitor
+nothing to do on its own. Also noted: scalient-ai.com's own h1 scores 4/5 on
+positioning because it names no number and no buyer, so the new headline should
+name one or the other.
