@@ -6,6 +6,13 @@ frozen pages** — nothing here touches their code or their deployments.
 Status: upstream of code. The offer is locked, the section map is proposed, the
 hero angle is undecided. See `../memory.md` → Active work.
 
+## `web/` — hero mock
+
+`web/index.html`: static hero plus one navy band, on a white base. Every line of
+copy is a bracketed placeholder for the user to fill; only the locked offer
+sentence and the five dimension names are real. Open it directly in a browser.
+Fonts load from Google Fonts, so offline it falls back to Arial.
+
 ## `audit_proto.py`
 
 Prototype of the instant GTM audit — the mechanism the whole offer rests on.

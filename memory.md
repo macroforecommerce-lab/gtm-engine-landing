@@ -20,6 +20,16 @@ after an earlier round where a finished page was delivered and rejected.
 - Step 3 — Copy, section by section: hero angles put to the user, **awaiting a pick.**
 - Step 4 — UI and build: not started.
 
+**UI direction decided (2026-10-03): white page, navy for emphasis.** Pure `#FFFFFF`
+base, navy `#010D3F` text, blue-to-cyan gradient on accents and buttons,
+`#F4F4F4` for tracks and quiet surfaces, one navy band (the final CTA) for
+rhythm. Prompted by the user seeing the old teardown page and asking for a white
+background; they confirmed it applies to the *new* page, not the frozen ones.
+A hero-only mock lives in `scorecard/web/index.html` — static, no build step.
+Every line of copy in it is a bracketed placeholder except the locked offer
+sentence and the five dimension names; the example scorecard is labelled
+"Example" and uses a placeholder domain. Not deployed.
+
 **Blocked on the user, nothing actionable this side:**
 
 | Waiting on | Why it blocks |

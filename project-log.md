@@ -154,3 +154,21 @@ limit that nobody wrote down is still a limit.
 Not fixed by this: commit `c166665` still contains the two scores in its
 history, and that is the user's call, not mine — rewriting a branch with an open
 PR is theirs to authorise.
+
+### 2026-10-03, after the break — white background
+
+The user returned with a screenshot of the old teardown page and "turn the
+background white." That page is one of the two frozen ones, and its source no
+longer exists: the Next.js rebuild was destroyed by the container resets, and
+Vercel refuses a second production deploy to an existing project. So the request
+could not be done as literally stated, and doing it would have broken the user's
+own standing rule.
+
+Asked rather than assumed. The user chose the new Scorecard page, white with navy
+for emphasis. Built a hero-only mock in `scorecard/web/`. Caught one defect of
+mine on review of the screenshots: `.hero{padding:48px 0 ...}` overrode the
+`.wrap` gutter, so the headline sat 24px left of the logo on desktop and touched
+the screen edge on mobile. Fixed with `padding-block`, then measured rather than
+eyeballed: logo and headline left edges now match at 1280px and 390px.
+
+Copy is placeholders throughout, per the standing division of labour.
