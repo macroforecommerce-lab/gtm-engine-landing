@@ -22,11 +22,19 @@ Two limits worth knowing before planning any deploy work — both verified, see
 `memory.md`: production deploys only happen when a project is created, and
 projects this session creates are invisible to it afterwards.
 
-## GitHub — read-only, blocked
+## GitHub — working
 
 Repo `macroforecommerce-lab/gtm-engine-landing`, branch
-`claude/gifted-shannon-0yefy9`. Reads succeed because the repo is public; every
-write path returns 403. The user must reconnect GitHub for this to change.
+`claude/gifted-shannon-0yefy9`, open as **PR #1**.
+
+Writes work. `gh api` reports `push: true, admin: true` and `git push` succeeds.
+This was blocked for most of 2026-10-03 — every write returned 403 — and the
+block lifted mid-session without announcement. See the correction in
+`project-log.md`; the transferable part is that a limit confirmed by testing
+holds for the moment it was tested, not for the session.
+
+All memory files, `scorecard/audit_proto.py` and `scorecard/test_audit.py` are
+pushed. Nothing of value exists only on the container disk.
 
 ## Cloudflare — present, deliberately untouched
 
