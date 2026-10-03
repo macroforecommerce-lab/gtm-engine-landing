@@ -19,22 +19,27 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import _audit_proto as a  # noqa: E402
 
 AUDIT_TIMEOUT = 8            # seconds; the function's own limit is short
-RATE_LIMIT, RATE_WINDOW = 10, 600
+RATE_LIMITS, RATE_WINDOW = {"audit": 12, "lead": 12}, 600   # per visitor address, per bucket
 CONTACT_EMAIL = "info@scalient-ai.com"
+BLOCKED = (401, 403, 429, 451)   # the site refused our reader; not the visitor's fault
 UTM_KEYS = ("utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "fbclid")
 EMAIL_RE = re.compile(r"^[^@\s]{1,64}@[^@\s]{1,255}\.[^@\s]{2,}$")
 
 _hits = {}   # ip -> [timestamps]. Per instance, so best effort, not a guarantee.
 
 
-def rate_limited(ip, now=None):
+def rate_limited(ip, bucket="audit", now=None):
+    """Separate buckets so one visitor's whole journey (audit, email, route answer)
+    does not spend a single shared allowance. Shared mobile and office addresses
+    carry several real visitors, so the limits are generous on purpose."""
     now = now if now is not None else time.time()
-    recent = [t for t in _hits.get(ip, []) if now - t < RATE_WINDOW]
-    if len(recent) >= RATE_LIMIT:
-        _hits[ip] = recent
+    key = (bucket, ip)
+    recent = [t for t in _hits.get(key, []) if now - t < RATE_WINDOW]
+    if len(recent) >= RATE_LIMITS[bucket]:
+        _hits[key] = recent
         return True
     recent.append(now)
-    _hits[ip] = recent
+    _hits[key] = recent
     return False
 
 
@@ -118,13 +123,18 @@ def run_audit(body, ip="unknown"):
     url = (body.get("url") or "").strip() if isinstance(body, dict) else ""
     if not url:
         return 400, {"ok": False, "error": "Enter your website address."}
-    if rate_limited(ip):
+    if rate_limited(ip, "audit"):
         return 429, {"ok": False, "error": "That is a lot of scorecards in a short time. Try again in a few minutes."}
     try:
         return 200, public_audit(a.audit(url, timeout=AUDIT_TIMEOUT))
     except a.UnsafeURL as e:
         return 400, {"ok": False, "error": str(e)}
     except urllib.error.HTTPError as e:
+        if e.code in BLOCKED:
+            return 200, {"ok": True, "scorable": False, "url": url,
+                         "reason": f"That website would not let our reader in (it answered {e.code}), so we could not read it. "
+                                   "Many sites block automated visitors. That says nothing about how it scores.",
+                         "neutral": []}
         return 502, {"ok": False, "error": f"That website answered with an error ({e.code}), so we could not read it."}
     except (urllib.error.URLError, TimeoutError, OSError):
         return 502, {"ok": False, "error": "We could not reach that website. Check the address and try again."}
@@ -166,7 +176,7 @@ def submit_lead(body, ip="unknown"):
     email = (body.get("email") or "").strip()
     if event not in ("lead", "route") or not EMAIL_RE.match(email):
         return 400, {"ok": False, "error": "Enter a valid email address."}
-    if rate_limited(ip):
+    if event == "lead" and rate_limited(ip, "lead"):
         return 429, {"ok": False, "error": "Too many requests. Try again in a few minutes."}
 
     record = {"event": event, "email": email, "ts": int(time.time()),

@@ -3,146 +3,230 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Scorecard Hero Mock</title>
-<meta name="robots" content="noindex">
+<title>Free GTM Scorecard for B2B Founders | Scalient</title>
+<meta name="description" content="Paste your website and get five GTM scores in about 60 seconds, each with the evidence behind it. Free, from the team at Scalient.">
+<!-- DRAFT: keep noindex until launch, then remove and add a canonical for the final domain. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFFFFF">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free GTM Scorecard for B2B Founders | Scalient">
+<meta property="og:description" content="Five GTM scores for your B2B startup, in about 60 seconds, each with the evidence behind it.">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-<style>
-  /* Brand kit (authoritative): Montserrat display, DM Sans body.
-     White is the page base; navy carries emphasis. */
-  :root{
-    --white:#FFFFFF; --off:#F4F4F4; --navy:#010D3F; --charcoal:#2A2A2A;
-    --blue:#0464F6; --cyan:#04B1DB;
-    --grad:linear-gradient(92deg,var(--blue),var(--cyan));
-    --line:#E3E6EE; --muted:#5B6280;
-    --display:'Montserrat','Helvetica Neue',Arial,sans-serif;
-    --body:'DM Sans','Helvetica Neue',Arial,sans-serif;
-  }
-  *{box-sizing:border-box;margin:0}
-  html{-webkit-text-size-adjust:100%}
-  body{background:var(--white);color:var(--charcoal);font:400 17px/1.55 var(--body);-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
-
-  /* Placeholder marker: anything the user must write is visibly bracketed. */
-  .ph{color:var(--muted);font-style:italic}
-  .ph-tag{display:inline-block;font:600 11px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;
-    color:var(--muted);border:1px dashed #B9BFD3;border-radius:999px;padding:6px 10px;margin-bottom:22px}
-
-  header.bar{padding:22px 0}
-  .logo{font:800 20px/1 var(--display);letter-spacing:.04em;color:var(--navy)}
-
-  .hero{padding-block:48px 88px;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-  h1{font:800 clamp(36px,5vw,58px)/1.06 var(--display);color:var(--navy);letter-spacing:-.02em}
-  h1 .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sub{margin-top:22px;max-width:34em;color:var(--charcoal)}
-
-  .field{margin-top:32px;display:flex;gap:10px;max-width:560px;padding:8px;background:var(--white);
-    border:1.5px solid var(--navy);border-radius:16px;box-shadow:0 10px 30px -12px rgba(1,13,63,.25)}
-  .field:focus-within{box-shadow:0 0 0 4px rgba(4,100,246,.18),0 10px 30px -12px rgba(1,13,63,.25)}
-  .field input{flex:1;min-width:0;border:0;outline:0;background:transparent;padding:14px 14px;font:500 17px var(--body);color:var(--navy)}
-  .field input::placeholder{color:#8A91AB}
-  .btn{border:0;cursor:pointer;border-radius:11px;padding:0 24px;font:700 16px var(--display);color:#fff;
-    background:var(--grad);white-space:nowrap;min-height:52px;transition:transform .15s,filter .15s}
-  .btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
-  .btn:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
-  .fine{margin-top:14px;font-size:14px;color:var(--muted)}
-
-  /* Example scorecard: labelled as an example, never as a real client's result. */
-  .card{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:26px;
-    box-shadow:0 30px 60px -30px rgba(1,13,63,.28)}
-  .card-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--line)}
-  .eg{font:600 11px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--blue);
-    background:rgba(4,100,246,.08);border-radius:999px;padding:7px 10px}
-  .site{font:600 15px var(--display);color:var(--navy)}
-  .total{font:800 38px/1 var(--display);color:var(--navy)}
-  .total small{font:600 16px var(--display);color:var(--muted)}
-  .rows{list-style:none;padding:6px 0 0}
-  .rows li{padding:14px 0;border-bottom:1px solid var(--line)}
-  .rows li:last-child{border-bottom:0}
-  .rowhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-  .dim{font:700 15px var(--display);color:var(--navy)}
-  .num{font:700 14px var(--display);color:var(--navy)}
-  .track{height:8px;border-radius:99px;background:var(--off);margin-top:9px;overflow:hidden}
-  .fill{height:100%;border-radius:99px;background:var(--grad);transform-origin:left;
-    animation:grow .9s cubic-bezier(.2,.7,.2,1) backwards}
-  @keyframes grow{from{transform:scaleX(0)}}
-  .fix{margin-top:8px;font-size:13.5px;color:var(--muted)}
-  .fix b{font-weight:600;color:var(--charcoal)}
-
-  /* One navy band: emphasis against the white page. */
-  .band{background:var(--navy);color:#fff;padding:72px 0}
-  .band h2{font:800 clamp(28px,3.6vw,40px)/1.12 var(--display);letter-spacing:-.01em;max-width:18em}
-  .band .ph{color:#9AA5D1}
-  .band .row{margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-  .band .btn{min-height:54px;padding:0 28px}
-  .ghost{font:600 15px var(--body);color:#C8D0EE}
-
-  @media (max-width:880px){
-    .hero{grid-template-columns:1fr;gap:40px;padding-block:24px 64px}
-    .field{flex-direction:column}
-    .btn{min-height:54px}
-  }
-  @media (prefers-reduced-motion:reduce){ .fill{animation:none} .btn{transition:none} }
-</style>
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"Scalient","url":"https://scalient-ai.com","email":"info@scalient-ai.com"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What do I get from the scorecard?","acceptedAnswer":{"@type":"Answer","text":"Five scores out of 5, with the evidence behind each, in about a minute. Enter your email and you also get the three fixes that should move pipeline fastest."}},
+{"@type":"Question","name":"What does it read?","acceptedAnswer":{"@type":"Answer","text":"Your public homepage: the headline, the opening text, numbers and quotes, calls to action and LinkedIn links. It does not see your CRM, ads or outbound results, so treat it as a place to start looking, not a full audit."}},
+{"@type":"Question","name":"Why do you ask for my email?","acceptedAnswer":{"@type":"Answer","text":"The scores are free and need nothing. The fix list is where we ask for an email, so we can follow up about it."}},
+{"@type":"Question","name":"What if my page cannot be scored?","acceptedAnswer":{"@type":"Answer","text":"Pages that need heavy JavaScript to show anything, and pages not in English, cannot be read reliably. We tell you that rather than guess, and you can still book the call."}},
+{"@type":"Question","name":"What happens on the 20-minute call?","acceptedAnswer":{"@type":"Answer","text":"We go through your scorecard and the three fixes, work out which part to fix first, and tell you honestly whether we are the right people to do it."}}
+]}
+</script>
 </head>
 <body>
 
-<header class="bar"><div class="wrap"><span class="logo">SCALIENT</span></div></header>
+<header class="bar"><div class="wrap"><span class="logo" aria-label="Scalient">SCALIENT</span></div></header>
 
-<main>
-<section class="wrap hero">
-  <div>
-    <span class="ph-tag">Mock &middot; headline and subhead are yours to write</span>
-    <h1><span class="ph">[Headline &mdash; hero angle not yet chosen]</span> <span class="accent">[accent words]</span></h1>
-    <p class="sub"><span class="ph">[Subhead &mdash; your copy.]</span>
-      Enter your website. In about 60 seconds you get five scores with the evidence behind each.</p>
+<main id="main">
 
-    <form class="field" onsubmit="return false" aria-label="Score your website">
-      <input type="text" inputmode="url" autocomplete="url" placeholder="yourcompany.com" aria-label="Your website">
-      <button class="btn" type="submit"><span class="ph" style="color:#fff;font-style:normal">[Button label]</span></button>
+<!-- 1. HERO -->
+<section class="wrap hero" id="top">
+  <div class="hero-copy">
+    <p class="eyebrow">Free GTM scorecard &middot; for B2B and SaaS founders</p>
+    <h1>Five GTM scores for your B2B startup, <span class="accent">in 60 seconds</span></h1>
+    <p class="sub">If your pipeline only moves when you are the one selling, this shows where it breaks. Paste your website and see how it scores on ICP, positioning, proof, conversion and founder signal, with the evidence behind each score.</p>
+
+    <form class="field" id="audit-form" novalidate aria-label="Score your website">
+      <label class="sr-only" for="url">Your website address</label>
+      <input id="url" name="url" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="yourcompany.com" required aria-describedby="url-error">
+      <button class="btn" type="submit" id="audit-btn">Score my website</button>
     </form>
-    <p class="fine"><span class="ph">[Reassurance line &mdash; your copy.]</span></p>
+    <p class="field-error" id="url-error" role="alert" hidden></p>
+    <p class="fine">Free. No signup to see your scores. We read your public homepage only.</p>
+    <noscript><p class="fine">The scorecard needs JavaScript. Email <a href="mailto:info@scalient-ai.com">info@scalient-ai.com</a> and we will score it for you.</p></noscript>
   </div>
 
   <aside class="card" aria-label="Example scorecard">
     <div class="card-top">
       <div>
         <span class="eg">Example</span>
-        <div class="site" style="margin-top:10px">yourcompany.com</div>
+        <div class="site">yourcompany.com</div>
       </div>
       <div class="total">16<small>/25</small></div>
     </div>
     <ul class="rows">
-      <li><div class="rowhead"><span class="dim">ICP clarity</span><span class="num">3/5</span></div>
-        <div class="track"><div class="fill" style="width:60%;animation-delay:.05s"></div></div>
-        <p class="fix"><b>Fixed by</b> ICP definition &amp; messaging</p></li>
-      <li><div class="rowhead"><span class="dim">Positioning</span><span class="num">4/5</span></div>
-        <div class="track"><div class="fill" style="width:80%;animation-delay:.12s"></div></div>
-        <p class="fix"><b>Fixed by</b> ICP definition &amp; messaging</p></li>
-      <li><div class="rowhead"><span class="dim">Proof for outbound</span><span class="num">4/5</span></div>
-        <div class="track"><div class="fill" style="width:80%;animation-delay:.19s"></div></div>
-        <p class="fix"><b>Fixed by</b> Clay &amp; AI-powered funnels</p></li>
-      <li><div class="rowhead"><span class="dim">Conversion path</span><span class="num">2/5</span></div>
-        <div class="track"><div class="fill" style="width:40%;animation-delay:.26s"></div></div>
-        <p class="fix"><b>Fixed by</b> Full-funnel distribution</p></li>
-      <li><div class="rowhead"><span class="dim">Founder signal</span><span class="num">3/5</span></div>
-        <div class="track"><div class="fill" style="width:60%;animation-delay:.33s"></div></div>
-        <p class="fix"><b>Fixed by</b> LinkedIn personal branding</p></li>
+      <li><div class="rowhead"><span class="dim">ICP clarity</span><span class="num">3/5</span></div><div class="track"><div class="fill" style="width:60%;animation-delay:.05s"></div></div><p class="fix"><b>Fixed by</b> ICP definition &amp; messaging</p></li>
+      <li><div class="rowhead"><span class="dim">Positioning</span><span class="num">4/5</span></div><div class="track"><div class="fill" style="width:80%;animation-delay:.12s"></div></div><p class="fix"><b>Fixed by</b> ICP definition &amp; messaging</p></li>
+      <li><div class="rowhead"><span class="dim">Proof for outbound</span><span class="num">4/5</span></div><div class="track"><div class="fill" style="width:80%;animation-delay:.19s"></div></div><p class="fix"><b>Fixed by</b> Clay &amp; AI-powered funnels</p></li>
+      <li><div class="rowhead"><span class="dim">Conversion path</span><span class="num">2/5</span></div><div class="track"><div class="fill" style="width:40%;animation-delay:.26s"></div></div><p class="fix"><b>Fixed by</b> Full-funnel distribution</p></li>
+      <li><div class="rowhead"><span class="dim">Founder signal</span><span class="num">3/5</span></div><div class="track"><div class="fill" style="width:60%;animation-delay:.33s"></div></div><p class="fix"><b>Fixed by</b> LinkedIn personal branding</p></li>
     </ul>
   </aside>
 </section>
 
-<section class="band">
+<!-- 2. SCORECARD RESULT: a page state, filled in by app.js, hidden until a score exists -->
+<section class="result" id="result" aria-live="polite" hidden>
   <div class="wrap">
-    <h2><span class="ph">[Final CTA headline &mdash; your copy]</span></h2>
-    <div class="row">
-      <button class="btn" type="button"><span class="ph" style="color:#fff;font-style:normal">[Button label]</span></button>
-      <span class="ghost ph">[Supporting line]</span>
+    <div id="result-loading" class="state" hidden>
+      <div class="spinner" aria-hidden="true"></div>
+      <p class="state-title" id="loading-text">Reading your homepage&hellip;</p>
+      <p class="fine">This usually takes under a minute.</p>
+    </div>
+
+    <div id="result-error" class="state" hidden>
+      <h2 class="state-title" tabindex="-1" id="error-title">We could not score that</h2>
+      <p id="error-text"></p>
+      <button class="btn btn-ghost" type="button" id="error-retry">Try another address</button>
+    </div>
+
+    <div id="result-unscored" class="state" hidden>
+      <h2 class="state-title" tabindex="-1" id="unscored-title">We could not score this page fairly</h2>
+      <p id="unscored-reason"></p>
+      <ul class="plain" id="unscored-neutral"></ul>
+      <p>You can still talk to us about it.</p>
+      <a class="btn" id="unscored-cta" href="#">Book a 20-minute call</a>
+    </div>
+
+    <div id="result-ok" hidden>
+      <div class="result-grid">
+        <div class="scorecard">
+          <div class="score-head">
+            <div>
+              <p class="eyebrow">Your GTM scorecard</p>
+              <h2 id="result-title" tabindex="-1" class="result-site"></h2>
+              <p class="lowest" id="result-lowest"></p>
+            </div>
+            <div class="total big"><span id="result-total"></span><small>/25</small></div>
+          </div>
+          <ul class="rows" id="result-rows"></ul>
+          <p class="fine">Scores come from what is visible on your public homepage. They show where to look, not the whole picture.</p>
+        </div>
+
+        <div class="gate" id="gate">
+          <h3>Your three fixes, ranked by how fast they move pipeline</h3>
+          <ol class="fixes" id="fix-list"></ol>
+
+          <form id="lead-form" class="lead" novalidate>
+            <label for="email">Work email</label>
+            <div class="field slim">
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="you@yourcompany.com" required aria-describedby="email-error">
+              <input type="text" name="hp" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
+              <button class="btn" type="submit" id="lead-btn">Unlock my 3 fixes</button>
+            </div>
+            <p class="field-error" id="email-error" role="alert" hidden></p>
+            <p class="fine">We use your email to follow up about your scorecard. <a href="/privacy">Privacy</a></p>
+          </form>
+
+          <div id="route" hidden>
+            <h3>One question so we point you the right way</h3>
+            <p>Is someone running growth in-house?</p>
+            <div class="route-btns">
+              <button class="btn btn-ghost" type="button" data-inhouse="yes">Yes</button>
+              <button class="btn btn-ghost" type="button" data-inhouse="no">No</button>
+            </div>
+          </div>
+
+          <div id="path" class="path" hidden>
+            <h3 id="path-title"></h3>
+            <p id="path-text"></p>
+            <a class="btn" id="path-cta" href="#">Book a 20-minute call</a>
+            <p class="fine" id="path-fallback" hidden></p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- 3. THE PROBLEM -->
+<section class="section" id="problem">
+  <div class="wrap">
+    <h2 class="h2">When pipeline lives in your head, it stops when you do.</h2>
+    <div class="three">
+      <article class="tile"><h3>It runs on your effort</h3><p>Posts, DMs, intros and follow-ups all start with you. Take a week off and the pipeline notices.</p></article>
+      <article class="tile"><h3>It makes sense to you, not to a stranger</h3><p>Positioning that works when a founder explains it falls flat on a cold visitor with five seconds to spare.</p></article>
+      <article class="tile"><h3>Your proof is trapped</h3><p>Wins live in your inbox and your memory, so outbound has nothing specific to cite and nobody to follow.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- 4. THE SYSTEM -->
+<section class="section tint" id="system">
+  <div class="wrap">
+    <h2 class="h2">Five scores, one for each part of a system that runs without you.</h2>
+    <p class="lede">Each score tells you what is weak and which part of the system fixes it, so a low number is an argument you reach yourself.</p>
+    <ol class="five">
+      <li><span class="n">1</span><h3>ICP clarity</h3><p>Does the page say who it is for?</p><p class="by"><b>Fixed by</b> ICP definition &amp; messaging</p></li>
+      <li><span class="n">2</span><h3>Positioning</h3><p>Does one specific claim carry the page?</p><p class="by"><b>Fixed by</b> ICP definition &amp; messaging</p></li>
+      <li><span class="n">3</span><h3>Proof for outbound</h3><p>Is there something concrete to quote?</p><p class="by"><b>Fixed by</b> Clay &amp; AI-powered funnels</p></li>
+      <li><span class="n">4</span><h3>Conversion path</h3><p>Is there one clear road to a conversation?</p><p class="by"><b>Fixed by</b> Full-funnel distribution</p></li>
+      <li><span class="n">5</span><h3>Founder signal</h3><p>Is there a person, and something recent, to follow?</p><p class="by"><b>Fixed by</b> LinkedIn personal branding</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 5. PROOF: real testimonials, taken verbatim from scalient-ai.com -->
+<section class="section" id="proof">
+  <div class="wrap">
+    <h2 class="h2">What happened when we built it for other teams.</h2>
+    <div class="quotes">
+      <figure class="quote"><p class="result-line">7 B2B wholesale contracts worth $250K in 8 weeks</p><blockquote>Our eCom moved fast, but B2B deals with gyms stalled. Scalient refined our offer, targeted decision makers, and built a follow-up system that actually got replies. In 8 weeks, we closed 7 wholesale contracts worth $250K.</blockquote><figcaption><span class="av" aria-hidden="true">EF</span><span><b>Edward F.</b><br>Founder &amp; Director, Fitness Avenue</span></figcaption></figure>
+      <figure class="quote"><p class="result-line">Top-tier positioning clarity &amp; funnel architecture</p><blockquote>Working with Shivam felt like having a CMO in your corner. The clarity he brought to my positioning, the way he structured the funnel was top tier. His team doesn't just run campaigns, they architect real systems. Easily the most insightful growth consultation I've had in years.</blockquote><figcaption><span class="av" aria-hidden="true">LC</span><span><b>Lakshay Chopra</b><br>Founder &amp; CEO, Marketing Agency</span></figcaption></figure>
+      <figure class="quote"><p class="result-line">40+ qualified calls &amp; 3 enterprise logos in 2 months</p><blockquote>Scalient came in like an ops teammate, not just an agency. In just 2 months, they turned our uncertain outreach into over 40 qualified calls and added three new enterprise logos. The handoff was simple and straightforward. I'd recommend them to any business for LeadGen.</blockquote><figcaption><span class="av" aria-hidden="true">KO</span><span><b>Kelvin Oben</b><br>Founder, ShipVista</span></figcaption></figure>
+      <figure class="quote"><p class="result-line">5.6x ROAS &amp; enterprise channels opened in 90 days</p><blockquote>Scalient felt like a fast moving extension of our team. Unlike the big agencies I worked with, they moved quickly, stayed sharp, and delivered. In 90 days, we hit 5.6x ROAS, opened new enterprise channels and filled our sales team's calendars. Already referred them to two portfolio companies.</blockquote><figcaption><span class="av" aria-hidden="true">CR</span><span><b>Claire Roberts</b><br>CMO, FinStack</span></figcaption></figure>
+      <figure class="quote"><p class="result-line">Fastest six-figure deal closed &amp; pipeline speed skyrocketed</p><blockquote>We received too many circle back later leads. Scalient improved our funnel, added smart followups, and found buyers ready to act now. Our pipeline speed skyrocketed. We closed our fastest six figure deal ever, without hiring new staff. I highly recommend them to any team fed up with vanity metrics and eager for real revenue.</blockquote><figcaption><span class="av" aria-hidden="true">SH</span><span><b>Sandy Haddad</b><br>Founder, Deplyt</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 6. TWO WAYS TO WORK -->
+<section class="section tint" id="ways">
+  <div class="wrap">
+    <h2 class="h2">Two ways to put it in place.</h2>
+    <div class="two">
+      <article class="way"><h3>Done-for-you</h3><p>We run the system for you each month: positioning, outbound, LinkedIn and funnels, operated by us.</p><p class="by"><b>Best when</b> nobody owns growth in-house yet.</p></article>
+      <article class="way"><h3>GTM Install</h3><p>A fixed-scope build, then we train your team to run it themselves.</p><p class="by"><b>Best when</b> someone already runs growth and needs the system.</p></article>
+    </div>
+    <p class="lede center">Either way, it starts with a 20-minute call.</p>
+  </div>
+</section>
+
+<!-- 7. FAQ -->
+<section class="section" id="faq">
+  <div class="wrap narrow">
+    <h2 class="h2">Quick answers</h2>
+    <details class="qa"><summary>What do I get from the scorecard?</summary><p>Five scores out of 5, with the evidence behind each, in about a minute. Enter your email and you also get the three fixes that should move pipeline fastest.</p></details>
+    <details class="qa"><summary>What does it read?</summary><p>Your public homepage: the headline, the opening text, numbers and quotes, calls to action and LinkedIn links. It does not see your CRM, ads or outbound results, so treat it as a place to start looking, not a full audit.</p></details>
+    <details class="qa"><summary>Why do you ask for my email?</summary><p>The scores are free and need nothing. The fix list is where we ask for an email, so we can follow up about it.</p></details>
+    <details class="qa"><summary>What if my page cannot be scored?</summary><p>Pages that need heavy JavaScript to show anything, and pages not in English, cannot be read reliably. We tell you that rather than guess, and you can still book the call.</p></details>
+    <details class="qa"><summary>What happens on the 20-minute call?</summary><p>We go through your scorecard and the three fixes, work out which part to fix first, and tell you honestly whether we are the right people to do it.</p></details>
+  </div>
+</section>
+
+<!-- 8. FINAL CTA -->
+<section class="band">
+  <div class="wrap">
+    <h2>Find out where your pipeline depends on you.</h2>
+    <div class="row">
+      <a class="btn" href="#top" id="final-cta">Score my website</a>
+      <span class="ghost">Free. About 60 seconds.</span>
+    </div>
+  </div>
+</section>
+
 </main>
 
+<footer class="foot"><div class="wrap">
+  <span>&copy; Scalient</span>
+  <span><a href="/privacy">Privacy</a> &middot; <a href="mailto:info@scalient-ai.com">info@scalient-ai.com</a></span>
+</div></footer>
+
+<script src="/app.js" defer></script>
 </body>
 </html>

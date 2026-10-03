@@ -7,6 +7,7 @@ import io
 import json
 import os
 import sys
+import urllib.error
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "web", "api"))
 import _audit_proto as a
@@ -118,10 +119,34 @@ a.audit = real_audit
 
 print("\nrate limit")
 L._hits.clear()
-hits = [L.rate_limited("1.2.3.4", now=1000 + i) for i in range(12)]
-check("first ten allowed, then limited", hits == [False] * 10 + [True] * 2)
-check("a different visitor is unaffected", L.rate_limited("5.6.7.8", now=1012) is False)
+hits = [L.rate_limited("1.2.3.4", now=1000 + i) for i in range(15)]
+check("first twelve audits allowed, then limited", hits == [False] * 12 + [True] * 3)
+check("a different visitor is unaffected", L.rate_limited("5.6.7.8", now=1015) is False)
+check("the lead bucket is separate from the audit bucket", L.rate_limited("1.2.3.4", "lead", now=1015) is False)
 check("window expires", L.rate_limited("1.2.3.4", now=1000 + L.RATE_WINDOW + 20) is False)
+
+L._hits.clear()
+a.audit = lambda url, timeout=8: fake_result([3, 4, 4, 2, 3])
+for _ in range(12):
+    quiet(L.run_audit, {"url": "x.com"}, "9.9.9.9")
+(code, _), _ = quiet(L.run_audit, {"url": "x.com"}, "9.9.9.9")
+check("audit limit returns 429 for a heavy address", code == 429)
+(code, body), _ = quiet(L.submit_lead, {"email": "f@s.in", "url": "x.com"}, "9.9.9.9")
+check("exhausting audits does not block the same visitor's email", code == 200 and len(body["fixes"]) == 3)
+for _ in range(5):
+    (code, body), _ = quiet(L.submit_lead, {"event": "route", "email": "f@s.in", "inhouse": "no"}, "9.9.9.9")
+check("route answers are never rate limited", code == 200)
+
+print("\nsites that block our reader")
+for status in (401, 403, 429, 451):
+    a.audit = lambda url, timeout=8, s=status: (_ for _ in ()).throw(urllib.error.HTTPError(url, s, "blocked", {}, None))
+    (code, body), _ = quiet(L.run_audit, {"url": "guarded.example"}, f"blk{status}")
+    check(f"HTTP {status} is 'could not read', with no score", code == 200 and body["scorable"] is False and str(status) in body["reason"])
+check("the message does not blame the visitor's score", "says nothing about how it scores" in body["reason"])
+a.audit = lambda url, timeout=8: (_ for _ in ()).throw(urllib.error.HTTPError(url, 404, "nf", {}, None))
+(code, body), _ = quiet(L.run_audit, {"url": "gone.example"}, "nf")
+check("a 404 is still an error the visitor can fix", code == 502 and body["ok"] is False)
+a.audit = real_audit
 
 print(f"\n{'all passed' if not failures else str(failures) + ' FAILED'}")
 sys.exit(1 if failures else 0)
