@@ -171,6 +171,11 @@ def fetch(url, timeout=25):
     return raw.decode("utf-8", "replace"), final
 
 
+def pl(n, word, plural=None):
+    """'1 role', '2 roles'. User-facing notes must not say 'role(s)'."""
+    return f"{n} {word if n == 1 else (plural or word + 's')}"
+
+
 def visible_text(html):
     t = re.sub(r"<(script|style|noscript)[^>]*>.*?</\1>", " ", html, flags=re.S | re.I)
     t = re.sub(r"<[^>]+>", " ", t)
@@ -222,11 +227,11 @@ def score_icp(html, text, head):
     generic = len(re.findall(GENERIC_AUDIENCE, top))
 
     if roles:
-        hits += 2; notes.append(f"names {roles} buyer role(s) up top")
+        hits += 2; notes.append(f"names {pl(roles, 'buyer role')} up top")
     else:
         notes.append("no buyer role named above the fold")
     if shapes:
-        hits += 2; notes.append(f"qualifies company shape ({shapes} signal(s))")
+        hits += 2; notes.append(f"qualifies company shape ({pl(shapes, 'signal')})")
     else:
         notes.append("no company stage/size/model qualifier")
     if generic >= 3:
@@ -252,22 +257,22 @@ def score_positioning(html, text, head):
 
     if not h1:
         claim = 0
-        notes.append("no <h1> - nothing claims the page")
+        notes.append("no <h1>, so nothing claims the page")
     elif words[-1].strip(".,:;!?-\u2013").lower() in DANGLING:
         claim = 1
-        notes.append(f'h1 ends on "{words[-1]}" - the claim continues elsewhere or was cut')
+        notes.append(f'h1 ends on "{words[-1]}", so the claim continues elsewhere or was cut')
     elif len(words) < 4:
         claim = 1
-        notes.append(f'h1 is {len(words)} words - a slogan, not a claim: "{show(h1)}"')
+        notes.append(f'h1 is {len(words)} words, a slogan and not a claim: "{show(h1)}"')
     elif len(words) > 16:
         claim = 1
-        notes.append(f"h1 is {len(words)} words - too long to land")
+        notes.append(f"h1 is {len(words)} words, too long to land")
     else:
         claim = 2
         notes.append(f'h1 reads: "{show(h1)}"')
         if (re.search(r"\d", h1) or re.search(ROLE_WORDS, h1, flags=re.I)
                 or re.search(r"[%$\u20b9]", h1)):
-            claim += 1; notes.append("h1 is specific - names a number or a buyer")
+            claim += 1; notes.append("h1 is specific: it names a number or a buyer")
         else:
             notes.append("h1 is well formed but names no number and no buyer")
 
@@ -280,12 +285,12 @@ def score_positioning(html, text, head):
     if buzz == 0:
         bonus = 2; notes.append("no filler buzzwords in the opening")
     elif buzz <= 2:
-        bonus = 1; notes.append(f"{buzz} buzzword(s) in the opening")
+        bonus = 1; notes.append(f"{pl(buzz, 'buzzword')} in the opening")
     else:
-        bonus = 0; notes.append(f"{buzz} buzzwords in the opening - claim is diluted")
+        bonus = 0; notes.append(f"{buzz} buzzwords in the opening, so the claim is diluted")
 
     if bonus > claim:
-        notes.append(f"clean-language credit held to {claim} - it cannot outrank the claim")
+        notes.append(f"clean-language credit held to {claim}: it cannot outrank the claim")
         bonus = claim
     return max(0, min(5, claim + bonus)), notes
 
@@ -300,14 +305,14 @@ def score_proof(html, text):
     if len(numbers) >= 5:
         hits += 3; notes.append(f"{len(numbers)} concrete numbers on the page")
     elif numbers:
-        hits += 1; notes.append(f"only {len(numbers)} concrete number(s)")
+        hits += 1; notes.append(f"only {pl(len(numbers), 'concrete number')}")
     else:
-        notes.append("no concrete numbers - nothing for outbound to quote")
+        notes.append("no concrete numbers, so nothing for outbound to quote")
 
     if quotes and testimonial_markers:
-        hits += 2; notes.append(f"{quotes} quote(s) with attributed titles")
+        hits += 2; notes.append(f"{pl(quotes, 'quote')} with attributed titles")
     elif quotes:
-        hits += 1; notes.append(f"{quotes} quote(s), attribution unclear")
+        hits += 1; notes.append(f"{pl(quotes, 'quote')}, attribution unclear")
     else:
         notes.append("no attributed customer quotes")
     return max(0, min(5, hits)), notes
@@ -324,9 +329,9 @@ def score_conversion(html, text):
     if distinct == 0:
         notes.append("no clear call to action found")
     elif distinct <= 2:
-        hits += 3; notes.append(f"{distinct} distinct CTA type(s) - focused")
+        hits += 3; notes.append(f"{pl(distinct, 'distinct call to action')}: focused")
     else:
-        hits += 1; notes.append(f"{distinct} competing CTA types - attention is split")
+        hits += 1; notes.append(f"{distinct} competing CTA types, so attention is split")
 
     if booking:
         hits += 2; notes.append("direct booking link present")
@@ -334,7 +339,7 @@ def score_conversion(html, text):
         notes.append("no direct booking path")
 
     if inputs > 6:
-        hits -= 1; notes.append(f"{inputs} visible form fields - heavy for cold traffic")
+        hits -= 1; notes.append(f"{inputs} visible form fields, heavy for cold traffic")
     return max(0, min(5, hits)), notes
 
 
@@ -347,16 +352,16 @@ def score_founder(html, text):
     signals = len(set(re.findall(SIGNAL_WORDS, text, flags=re.I)))
 
     if li_personal:
-        hits += 3; notes.append(f"{len(set(li_personal))} personal LinkedIn profile(s) linked")
+        hits += 3; notes.append(f"{pl(len(set(li_personal)), 'personal LinkedIn profile')} linked")
     elif li_company:
-        hits += 1; notes.append("company LinkedIn only - no person to follow")
+        hits += 1; notes.append("company LinkedIn only, no person to follow")
     else:
         notes.append("no LinkedIn presence linked at all")
 
     if about:
         hits += 1; notes.append("has an about/team page")
     if signals:
-        hits += 1; notes.append(f"{signals} outbound-usable signal(s) (hiring, funding, launches)")
+        hits += 1; notes.append(f"{pl(signals, 'outbound-usable signal')} (hiring, funding, launches)")
     else:
         notes.append("no timely signals a cold email could reference")
     return max(0, min(5, hits)), notes
@@ -375,17 +380,22 @@ def neutral_observations(html, text):
     """What can still be said when the vocabularies do not apply."""
     out = []
     nums = re.findall(r"(?<![\w])(?:[₹$]\s?\d[\d,.]*\s?[KkMmLl]?|\d[\d,.]*\s?(?:%|x\b)|\d{2,}\+)", text[:9000])
-    out.append(f"{len(nums)} concrete number(s) on the page")
+    out.append(f"{pl(len(nums), 'concrete number')} on the page")
     personal = len(set(re.findall(r"linkedin\.com/in/[A-Za-z0-9\-_%]+", html)))
     company = len(set(re.findall(r"linkedin\.com/company/[A-Za-z0-9\-_%]+", html)))
-    out.append(f"{personal} personal and {company} company LinkedIn link(s)")
+    out.append(f"{pl(personal, 'personal LinkedIn link')} and {pl(company, 'company LinkedIn link')}")
     booking = bool(re.search(r"(calendly|cal\.com|hubspot\.com/meetings|savvycal)", html, flags=re.I))
     out.append("booking link present" if booking else "no booking link")
     inputs = len(re.findall(r"<input[^>]*type=[\"']?(?!hidden)", html, flags=re.I))
-    out.append(f"{inputs} visible form field(s)")
+    out.append(f"{pl(inputs, 'visible form field')}")
     h1 = h1_of(html)
     out.append(f'h1 is {len(h1.split())} words: "{show(h1)}"' if h1 else "no <h1>")
     return out
+
+
+LANGUAGE_NAMES = {"it": "Italian", "es": "Spanish", "fr": "French", "de": "German",
+                  "pt": "Portuguese", "nl": "Dutch", "ja": "Japanese", "zh": "Chinese",
+                  "ar": "Arabic", "hi": "Hindi", "ru": "Russian"}
 
 
 def audit(url, timeout=25):
@@ -396,17 +406,19 @@ def audit(url, timeout=25):
 
     if words < MIN_WORDS:
         return {"url": final, "scorable": False,
-                "reason": f"only {words} visible words - under the {MIN_WORDS}-word floor. "
-                          "The page was not read, so it cannot be judged: likely "
-                          "client-side rendered, gated, or a redirect shell.",
+                "reason": f"We could only find {pl(words, 'word')} of text on that page, which is too little to judge. "
+                          "It may load its content with JavaScript, sit behind a login, or just redirect somewhere else.",
+                "detail": f"{words} visible words, under the {MIN_WORDS}-word floor",
                 "neutral": neutral_observations(html, text)}
 
     lang, evidence = detect_language(html, text)
     if lang != "en":
+        name = LANGUAGE_NAMES.get(lang)
+        what = f"in {name}" if name else "not in English"
         return {"url": final, "scorable": False, "language": lang,
-                "reason": f"page is not in English ({lang}) - {evidence}. The "
-                          "vocabularies here are English-only, so a score would "
-                          "measure the language, not the GTM.",
+                "reason": f"That page looks {what}, and the scorecard only reads English. "
+                          "Any score would reflect the language and not your go-to-market, so we have not given one.",
+                "detail": f"language {lang}: {evidence}",
                 "neutral": neutral_observations(html, text)}
 
     out, total = [], 0
@@ -433,6 +445,8 @@ if __name__ == "__main__":
         if not r["scorable"]:
             print(f"{r['url']}   ->   NOT SCORED")
             print(f"  {r['reason']}")
+            if r.get("detail"):
+                print(f"  ({r['detail']})")
             print("  What can still be seen:")
             for e in r["neutral"]:
                 print(f"          - {e}")

@@ -198,7 +198,7 @@ def submit_lead(body, ip="unknown"):
             record["total"] = result["total"]
             record["scores"] = {d["dimension"]: d["score"] for d in result["dimensions"]}
         else:
-            record["note"] = "not scored: " + result["reason"][:120]
+            record["note"] = "not scored: " + (result.get("detail") or result["reason"])[:120]
     except Exception as e:
         record["note"] = f"audit failed: {type(e).__name__}"
     deliver(record)

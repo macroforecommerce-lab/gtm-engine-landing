@@ -76,6 +76,7 @@ h1{font:800 clamp(34px,4.8vw,56px)/1.07 var(--display);color:var(--navy);letter-
 .result{padding:8px 0 72px;background:var(--tint);border-block:1px solid var(--line)}
 .result .wrap{padding-top:48px}
 .result-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:start}
+.gate{position:sticky;top:24px}
 .state{max-width:620px;margin:0 auto;text-align:center;padding:24px 0}
 .state-title{font:700 24px/1.2 var(--display);color:var(--navy);outline:0}
 .state p{margin-top:12px}
@@ -161,6 +162,7 @@ h1{font:800 clamp(34px,4.8vw,56px)/1.07 var(--display);color:var(--navy);letter-
   .three,.quotes{grid-template-columns:1fr}
   .quote:first-child{grid-column:auto}
   .result-grid{grid-template-columns:1fr}
+  .gate{position:static}
 }
 @media (max-width:880px){
   .hero{grid-template-columns:1fr;gap:40px;padding-block:24px 56px}

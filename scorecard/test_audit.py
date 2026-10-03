@@ -47,13 +47,13 @@ CASES = [
 
 GATES = [
     ("thin page is refused, not scored",
-     '<html lang="en"><body><div id="root"></div></body></html>', "visible words"),
+     '<html lang="en"><body><div id="root"></div></body></html>', "words of text"),
     ("non-English page is refused, not scored",
      f'<html lang="it-IT"><body><h1>Il sistema per il tuo studio</h1><p>{IT_FILLER}</p></body></html>',
-     "not in English"),
+     "only reads English"),
     ("non-English detected without a lang attribute",
      f"<html><body><h1>Il sistema per il tuo studio</h1><p>{IT_FILLER}</p></body></html>",
-     "not in English"),
+     "only reads English"),
     ("English accepted without a lang attribute",
      f"<html><body><h1>Book more qualified calls with founders</h1><p>{FILLER}</p></body></html>",
      None),
@@ -103,6 +103,36 @@ def main():
         failures += not ok
         print(f"  {'PASS' if ok else 'FAIL'}  {word:18} {'match' if got else 'no match':9} expected "
               f"{'match' if want else 'no match'}")
+
+    print("\nvisitor-facing wording")
+    import re as _re
+    def notes_for(html):
+        a.fetch = lambda u, timeout=25: (html, "https://fixture")
+        r = a.audit("fixture")
+        return [n for d in r.get("dimensions", []) for n in d["evidence"]] + r.get("neutral", []) + [r.get("reason", "")]
+    samples = [
+        page("<h1>Add 30 qualified founder calls to your pipeline each month</h1>"),
+        page("<h1>Grow faster</h1>"),
+        page("<h1>Innovative seamless synergy for your business</h1>"),
+        page("<h1>Build marketing systems that actually deliver</h1><a href='https://linkedin.com/in/someone'>x</a>"),
+        '<html lang="en"><body><div id="root"></div></body></html>',
+        f'<html lang="it"><body><h1>Il sistema per il tuo studio</h1><p>{IT_FILLER}</p></body></html>',
+        f'<html lang="ja"><body><h1>x</h1><p>{FILLER}</p></body></html>',
+    ]
+    all_notes = [n for s in samples for n in notes_for(s)]
+    bad_plural = [n for n in all_notes if "(s)" in n]
+    bad_dash = [n for n in all_notes if " - " in n]
+    jargon = [n for n in all_notes if any(w in n.lower() for w in ("stopword", "floor", "vocabular", "client-side"))]
+    failures += bool(bad_plural); print(f"  {'FAIL' if bad_plural else 'PASS'}  no '(s)' plurals shown to visitors  {bad_plural[:1]}")
+    failures += bool(bad_dash);   print(f"  {'FAIL' if bad_dash else 'PASS'}  no spaced hyphens shown to visitors  {bad_dash[:1]}")
+    failures += bool(jargon);     print(f"  {'FAIL' if jargon else 'PASS'}  no analyser jargon shown to visitors  {jargon[:1]}")
+    ok = a.pl(1, "role") == "1 role" and a.pl(2, "role") == "2 roles" and a.pl(0, "role") == "0 roles"
+    failures += not ok; print(f"  {'PASS' if ok else 'FAIL'}  pluralisation: 1 role, 2 roles, 0 roles")
+    r = a.audit.__globals__["audit"]
+    a.fetch = lambda u, timeout=25: (f'<html lang="it"><body><p>{IT_FILLER}</p></body></html>', "https://fixture")
+    res = a.audit("fixture")
+    ok = "Italian" in res["reason"] and "stopword" in res["detail"]
+    failures += not ok; print(f"  {'PASS' if ok else 'FAIL'}  language is named for the visitor; technical detail kept apart")
 
     print("\nunsafe addresses are refused (no network needed)")
     refused = [
