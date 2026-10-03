@@ -24,8 +24,12 @@ projects this session creates are invisible to it afterwards.
 
 ## GitHub — working
 
-Repo `macroforecommerce-lab/gtm-engine-landing`, branch
-`claude/gifted-shannon-0yefy9`, open as **PR #1**.
+Repo `macroforecommerce-lab/gtm-engine-landing`, working branch
+`claude/gifted-shannon-0yefy9`. **PR #1 is merged** (squash, `c8cb3a9`).
+
+Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the original
+Vite skeleton (`src/`) and publishes it to GitHub Pages. That run succeeded on the
+merge. It does **not** publish `scorecard/web/`.
 
 Writes work. `gh api` reports `push: true, admin: true` and `git push` succeeds.
 This was blocked for most of 2026-10-03 — every write returned 403 — and the

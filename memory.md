@@ -4,6 +4,10 @@ What is true now. History lives in `project-log.md`; finished work in `archive.m
 
 Last checkpoint: 2026-10-03.
 
+**Repo state:** PR #1 was squash-merged into `main` as `c8cb3a9`. Everything in this
+file's history is now on `main`. New work starts from `main` on branch
+`claude/gifted-shannon-0yefy9`; any further PR is a new one, not #1.
+
 ## Active work
 
 **Scorecard landing page — a from-scratch rebuild for Meta paid traffic.**

@@ -172,3 +172,18 @@ the screen edge on mobile. Fixed with `padding-block`, then measured rather than
 eyeballed: logo and headline left edges now match at 1280px and 390px.
 
 Copy is placeholders throughout, per the standing division of labour.
+
+### 2026-10-03 — PR #1 merged
+
+The user asked for the PR to be merged ("no worries merge the PR") after asking
+what a PR was; I had explained it and said merging was optional. Squash-merged as
+`c8cb3a9`. Chose squash deliberately: the early commit `c166665` carried two
+client sites' audit scores, and squashing keeps it out of `main`'s history.
+Verified: `git log -S` for the scores finds nothing on `main`. They remain in the
+now-merged branch's commits and in GitHub's record of the PR, which only the
+user can purge.
+
+Side effect worth knowing: the merge triggered the repo's existing Pages deploy,
+which published the untouched Vite skeleton. Run succeeded. Not the Scorecard mock.
+
+PR watch and the 21:15 UTC safety-net check-in were cancelled.
