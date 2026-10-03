@@ -45,6 +45,10 @@ Fixed 2026-10-03, with what the fix changed:
      near 0/25 and the prospect was told their GTM was broken when the page had
      simply not been read.
 
+Hardened 2026-10-03 for public use: fetch() refuses non-public addresses on the
+first request and on every redirect (see check_public_url), because a hosted
+version fetches whatever a visitor types.
+
 Open, not yet fixed:
   - Specificity is keyword-based, so an h1 can make a sharp claim in words the
     vocabulary does not carry and miss the bonus.
@@ -53,10 +57,13 @@ Open, not yet fixed:
     A neutral benchmark set - sites that are neither clients nor prospects -
     would evidence it better, and needs sign-off on which sites qualify.
 """
+import ipaddress
 import re
+import socket
 import sys
 import urllib.request
 from html import unescape
+from urllib.parse import urlparse
 
 UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/140.0 Safari/537.36")
@@ -106,11 +113,59 @@ STOPWORDS = {
 STOPWORDS = {k: set(v.split()) for k, v in STOPWORDS.items()}
 
 
-def fetch(url):
-    if not url.startswith("http"):
+class UnsafeURL(ValueError):
+    """The address cannot be scored. The message is safe to show the visitor."""
+
+
+def check_public_url(url):
+    """Refuse anything that is not an ordinary public web address.
+
+    The server fetches whatever a visitor types, so without this the tool can be
+    pointed at the host's own network, a cloud metadata address, or a local file.
+    Applied to the first request and to every redirect.
+
+    Residual risk, accepted for now: the name is resolved here and again when the
+    connection is made, so a DNS record that changes between the two could slip
+    through. Closing it means connecting to the resolved address directly.
+    """
+    p = urlparse(url)
+    if p.scheme not in ("http", "https"):
+        raise UnsafeURL("Only http and https addresses can be scored.")
+    if p.username or p.password:
+        raise UnsafeURL("Addresses with a username or password cannot be scored.")
+    if p.port not in (None, 80, 443):
+        raise UnsafeURL("Only standard web ports can be scored.")
+    host = p.hostname
+    if not host or "." not in host:
+        raise UnsafeURL("That does not look like a website address.")
+    try:
+        infos = socket.getaddrinfo(host, None)
+    except socket.gaierror:
+        raise UnsafeURL("We could not find that website. Check the address and try again.")
+    for info in infos:
+        if not ipaddress.ip_address(info[4][0].split("%")[0]).is_global:
+            raise UnsafeURL("That address is not a public website.")
+    return host
+
+
+class _CheckedRedirects(urllib.request.HTTPRedirectHandler):
+    max_redirections = 5
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        check_public_url(newurl)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def fetch(url, timeout=25):
+    url = (url or "").strip()
+    if len(url) > 300:
+        raise UnsafeURL("That address is too long.")
+    if "://" not in url:
         url = "https://" + url
+    check_public_url(url)
+    opener = urllib.request.build_opener(_CheckedRedirects)
     req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=25) as r:
+    with opener.open(req, timeout=timeout) as r:
         raw = r.read(1_500_000)
         final = r.geturl()
     return raw.decode("utf-8", "replace"), final
@@ -333,8 +388,8 @@ def neutral_observations(html, text):
     return out
 
 
-def audit(url):
-    html, final = fetch(url)
+def audit(url, timeout=25):
+    html, final = fetch(url, timeout=timeout)
     text = visible_text(html)
     head = head_text(html)
     words = len(text.split())
@@ -368,6 +423,9 @@ if __name__ == "__main__":
     for target in sys.argv[1:]:
         try:
             r = audit(target)
+        except UnsafeURL as e:
+            print(f"\n{target}\n  REFUSED: {e}")
+            continue
         except Exception as e:
             print(f"\n{target}\n  FETCH FAILED: {type(e).__name__}: {e}")
             continue
